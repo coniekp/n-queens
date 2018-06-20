@@ -62,7 +62,7 @@
     },
 
 
-/*
+    /*
          _             _     _
      ___| |_ __ _ _ __| |_  | |__   ___ _ __ ___ _
     / __| __/ _` | '__| __| | '_ \ / _ \ '__/ _ (_)
@@ -79,12 +79,17 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      return this.attributes[rowIndex].reduce(function (a, b) {
+        return a + b;
+      }) > 1;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      var boundHasRowConflictAt = this.hasRowConflictAt.bind(this);
+      return !_.every (this.attributes, function (row, index) {
+        return typeof row === 'number' || !boundHasRowConflictAt(index);
+      });
     },
 
 
@@ -94,12 +99,25 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      var colHasPiece = false;
+      return _.reduce (this.attributes, function (accumulator, row) {
+        if (row[colIndex] === 1) {
+          if (colHasPiece) {
+            return true;
+          } else {
+            colHasPiece = true;
+          }
+        }
+        return accumulator;
+      }, false);
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      var boundHasColConflictAt = this.hasColConflictAt.bind(this);
+      return !this.attributes[0].every(function (square, index) {
+        return !boundHasColConflictAt(index);
+      }); // fixme
     },
 
 
