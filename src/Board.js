@@ -174,18 +174,15 @@
       var rowStart = 0;
       var colStart = index;
       var loopMax = index;
-      if (index >= 0) {
-        for (var i = 0; i <= loopMax; i++) {
-          count += this.get(rowStart + i)[colStart - i];
-        }
-      } else {
+      
+      if (index < 0) {
         rowStart = Math.abs(index);
         colStart = this.get('n') - 1;
         loopMax = colStart + index;
-        
-        for (var i = 0; i <= loopMax; i++) {
-          count += this.get(rowStart + i)[colStart - i];
-        }
+      }
+      
+      for (var i = 0; i <= loopMax; i++) {
+        count += this.get(rowStart + i)[colStart - i];
       }
       
       if (count > 1) {
